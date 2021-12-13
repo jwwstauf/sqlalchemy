@@ -9,20 +9,16 @@ from flask import Flask, jsonify
 
 engine = create_engine("sqlite:///hawaii.sqlite")
 
-# reflect an existing database into a new model
+
 Base = automap_base()
-# reflect the tables
+
 Base.prepare(engine, reflect=True)
 
-# Save reference to the table
 measurement = Base.classes.measurement
 station = Base.classes.station
 
 
 
-#################################################
-# Flask Setup
-#################################################
 app = Flask(__name__)
 
 @app.route("/")
@@ -40,7 +36,7 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    # Create our session (link) from Python to the DB
+  
     session = Session(engine)
 
     
@@ -58,11 +54,10 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    # Create our session (link) from Python to the DB
+    
     session = Session(engine)
 
-    """Return a list of passenger data including the name, age, and sex of each passenger"""
-    # Query all passengers
+   
     results = session.query(station.name).all()
 
     session.close()
@@ -77,8 +72,7 @@ def tobs():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of passenger data including the name, age, and sex of each passenger"""
-    # Query all passengers
+    
     t_results = session.query(measurement.date, measurement.tobs).filter(measurement.date >= '2016-08-23', measurement.station == 'USC00519281').all()
 
     session.close()
@@ -90,7 +84,7 @@ def tobs():
         row["tobs"] = result[1]
         temperature_totals.append(row)
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+
 
     return jsonify(temperature_totals)   
 
